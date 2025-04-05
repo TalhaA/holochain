@@ -1,0 +1,37 @@
+# Justfile for Nalu Coin
+
+# Build the zomes with dependencies
+build-zomes:
+    cd dna/zomes/integrity && RUSTFLAGS="-C opt-level=z -C target-cpu=native" cargo build --release --target wasm32-unknown-unknown
+    cd dna/zomes/coordinator && RUSTFLAGS="-C opt-level=z -C target-cpu=native" cargo build --release --target wasm32-unknown-unknown
+
+# Build the DNA package
+build-dna: build-zomes
+    hc dna pack
+
+# Build the hApp package
+build-happ: build-dna
+    hc app pack
+    
+# Generate a sandbox with the app
+generate: build-happ
+    hc-sandbox generate --app-id nalu-coin ./nalu-coin.happ
+    
+# Run the sandbox
+run:
+    hc-sandbox run
+
+# Clean builds
+clean:
+    cd dna/zomes/integrity && cargo clean
+    cd dna/zomes/coordinator && cargo clean
+    rm -f nalu-coin.dna
+    rm -f nalu-coin.happ
+
+# Get account balance
+get-balance AGENT:
+    hc-sandbox call --zome-name nalu_coin_coordinator --fn-name get_balance --input '{"agent_pubkey": "{{AGENT}}"}'
+
+# Transfer coins between accounts
+transfer-coins RECIPIENT AMOUNT:
+    hc-sandbox call --zome-name nalu_coin_coordinator --fn-name transfer_coins --input '{"recipient": "{{RECIPIENT}}", "amount": {{AMOUNT}}}'

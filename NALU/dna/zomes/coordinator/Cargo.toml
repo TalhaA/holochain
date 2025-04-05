@@ -1,0 +1,12 @@
+[package]
+name = "nalu_coin_coordinator"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+hdk = "=0.5.0-dev.19"
+nalu_coin_integrity = { path = "../integrity" }
+serde = "1"

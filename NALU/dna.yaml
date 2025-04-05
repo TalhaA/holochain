@@ -1,0 +1,18 @@
+---
+manifest_version: "1"
+name: nalu-coin
+integrity:
+  network_seed: ~
+  properties:
+    description: "A simple digital currency on Holochain"
+  origin_time: 1686787907639010
+  zomes:
+    - name: integrity
+      bundled: "./target/wasm32-unknown-unknown/release/deps/nalu_coin_integrity.wasm"
+      dependencies: ~
+coordinator:
+  zomes:
+    - name: coordinator
+      bundled: "./target/wasm32-unknown-unknown/release/deps/nalu_coin_coordinator.wasm"
+      dependencies:
+        - name: integrity

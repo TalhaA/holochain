@@ -1,0 +1,11 @@
+---
+manifest_version: "1"
+name: nalu-coin
+description: "A Holochain app for community digital currency"
+roles:
+  - name: nalu-coin
+    provisioning:
+      strategy: create
+      deferred: false
+    dna:
+      bundled: "workdir/nalu-coin/nalu-coin.dna"
